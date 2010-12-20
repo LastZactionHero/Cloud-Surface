@@ -1,0 +1,29 @@
+<h1>Listing drawings</h1>
+
+<table>
+  <tr>
+    <th>Thread</th>
+    <th>User</th>
+    <th>X</th>
+    <th>Y</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @drawings.each do |drawing| %>
+  <tr>
+    <td><%= drawing.thread %></td>
+    <td><%= drawing.user %></td>
+    <td><%= drawing.x %></td>
+    <td><%= drawing.y %></td>
+    <td><%= link_to 'Show', drawing %></td>
+    <td><%= link_to 'Edit', edit_drawing_path(drawing) %></td>
+    <td><%= link_to 'Destroy', drawing, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Drawing', new_drawing_path %>
