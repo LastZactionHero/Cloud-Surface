@@ -1,4 +1,7 @@
 Cloudsurface::Application.routes.draw do
+  match 'drawings/fetch_threads' => 'drawings#fetch_threads'
+  match 'drawings/new_thread' => 'drawings#new_thread'
+  match 'drawings/clear_all' => 'drawings#clear_all'
   resources :drawings
 
   # The priority is based upon order of creation:

@@ -80,4 +80,63 @@ class DrawingsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  # Fetch All Threads
+  def fetch_threads
+    @drawings = Drawing.all
+
+    respond_to do |format|
+      #format.xml  { render :xml => @drawings }
+      format.xml { render :xml => @drawings, :except => [ :created_at, :updated_at ], :skip_types => true  }
+    end
+  
+  end
+  
+  # Add New Thread
+  def new_thread
+    #?user=0&points=0,0,100,0,100,100,0,100,0,0
+    
+    # Get New Thread Index
+    thread_idx = 0
+    drawings = Drawing.find( :all, :order => "thread DESC" )
+    if drawings.length > 0 then
+      thread_idx = drawings[0][:thread] + 1 
+    end
+  
+    # Get Thread Parameters
+    user = params[:user]
+    points = params[:points].split( ',' )
+    point_count = points.length / 2
+    
+    # Build and Save Thread
+    for i in ( 0..(point_count - 1) )
+      x = points[2 * i]
+      y = points[2 * i + 1]
+      
+      drawing = Drawing.new(params[:drawing])
+      drawing.x = x;
+      drawing.y = y;
+      drawing.user = user;
+      drawing.thread = thread_idx;
+      drawing.save
+    end
+    
+    puts "Thread Idx: #{thread_idx}"
+    puts "User: #{user}"
+    puts "Points: #{points}"
+    puts "Point Count: #{point_count}"
+    
+    redirect_to :action => 'index'
+  end
+  
+  # Clear Drawing
+  def clear_all
+    drawings = Drawing.all
+    
+    drawings.each do |drawing|
+      drawing.destroy
+    end
+    
+    redirect_to :action => 'index'
+  end
 end
